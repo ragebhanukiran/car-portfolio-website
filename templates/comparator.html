@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Comparator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #1c1c1c;
+            color: #e0e0e0;
+        }
+        h1, h2 {
+            color: #f4f4f4;
+            border-bottom: 2px solid #444;
+            padding-bottom: 10px;
+        }
+        .error {
+            color: #ff4c4c;
+            font-weight: bold;
+        }
+        .car-list, .comparison-table {
+            margin-top: 20px;
+        }
+        .car-list ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .car-list li {
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 10px;
+            width: 200px;
+            text-align: center;
+            background-color: #333;
+            transition: background-color 0.3s;
+        }
+        .car-list li:hover {
+            background-color: #444;
+        }
+        .car-list img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .comparison-table {
+            overflow-x: auto;
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1c1c1c;
+            padding: 20px;
+            border: 1px solid #444;
+            z-index: 1000;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            max-width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+            border-radius: 10px;
+        }
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #555;
+            padding: 10px;
+            text-align: center;
+        }
+        .comparison-table th {
+            background-color: #444;
+            color: #f4f4f4;
+        }
+        .comparison-table td {
+            background-color: #333;
+            color: #e0e0e0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .fixed-buttons-container {
+            display: flex;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            gap: 15px;
+            z-index: 1001;
+        }
+        .search-input {
+            padding: 8px;
+            width: 200px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Car Comparator</h1>
+
+    <!-- Error Message -->
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <!-- Search Feature -->
+    <input type="text" id="search" class="search-input" placeholder="Search for cars..." oninput="filterCars()">
+
+    <!-- Car Selection Form -->
+    <form method="POST" action="/compare">
+        <div class="car-list">
+            <h2>All Cars</h2>
+            <ul id="car-list">
+                {% for car in car_data %}
+                <li>
+                    <img src="{{ car.image }}" alt="{{ car.name }}">
+                    <p><strong>{{ car.brand }} {{ car.name }}</strong></p>
+                    <!-- <p>Price: {{ car.price }}</p>
+                    <p>Engine: {{ car.engine }}</p>
+                    <p>Mileage: {{ car.mileage }}</p> -->
+                    <input type="checkbox" name="selectedCars" value="{{ car.id }}"> Select for Comparison
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Fixed Buttons Container -->
+        <div class="fixed-buttons-container">
+            <button type="submit">Compare Selected Cars</button>
+            <button type="button" onclick="showComparisonTable(event)">Comparison Table</button>
+        </div>
+    </form>
+
+    <!-- Comparison Table -->
+    <div id="comparison-table" class="comparison-table">
+        <button onclick="closeComparisonTable()">Close</button>
+        <h2>Comparison Table</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    {% for car in comparison_table %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Image</td>
+                    {% for car in comparison_table %}
+                    <td><img src="{{ car.image }}" alt="{{ car.name }}" width="150px"></td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    {% for car in comparison_table %}
+                    <td><p><strong>{{ car.brand }} {{ car.name }}</strong></p></td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Price</td>
+                    {% for car in comparison_table %}
+                    <td>{{ car.price }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Engine</td>
+                    {% for car in comparison_table %}
+                    <td>{{ car.engine }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Mileage</td>
+                    {% for car in comparison_table %}
+                    <td>{{ car.mileage }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Seating Capacity</td>
+                    {% for car in comparison_table %}
+                    <td>{{ car.seatingCapacity }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Fuel Type</td>
+                    {% for car in comparison_table %}
+                    <td>{{ car.fuelType }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Transmission</td>
+                    {% for car in comparison_table %}
+                    <td>{{ car.transmissionType }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Power</td>
+                    {% for car in comparison_table %}
+                    <td>{{ car.power }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Rating</td>
+                    {% for car in comparison_table %}
+                    <td>{{ car.avgRating }}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function showComparisonTable(event) {
+    // Prevent the form from submitting and reloading the page
+    event.preventDefault();
+
+    // Show the comparison table
+    document.getElementById('comparison-table').style.display = 'block';
+}
+
+function closeComparisonTable() {
+    document.getElementById('comparison-table').style.display = 'none';
+}
+
+function filterCars() {
+    const searchTerm = document.getElementById('search').value.toLowerCase();
+    const carListItems = document.querySelectorAll('#car-list li');
+    carListItems.forEach(item => {
+        const carName = item.querySelector('strong').textContent.toLowerCase();
+        if (carName.includes(searchTerm)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+function removeCar(carId) {
+    // Find the checkbox that corresponds to this car and uncheck it
+    const carCheckbox = document.querySelector(`input[type="checkbox"][value="${carId}"]`);
+    if (carCheckbox) {
+        carCheckbox.checked = false;
+    }
+
+    // Simulate the removal of the car from the comparison table
+    const row = document.querySelector(`#comparison-row-${carId}`);
+    if (row) {
+        row.remove();
+    }
+}
+
+    </script>
+</body>
+</html>

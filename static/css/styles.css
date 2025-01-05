@@ -1,0 +1,191 @@
+/* General Body Styling */
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: white;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+    overflow-x: hidden;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('https://www.wsupercars.com/wallpapers-regular/BMW/2005-BMW-M3-GTR-Need-For-Speed-001-2160.jpg'); /* Replace with your background image URL */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    z-index: -2;
+}
+
+.dim-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent overlay for dim effect */
+    z-index: -1;
+}
+
+/* Main Heading */
+h1 {
+    font-size: 4em;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 1; /* Ensure it's above background */
+}
+
+/* Section Styling */
+section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.6); /* Consistent dim background */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Explore Button Styling (same as company buttons) */
+.home-buttons {
+    display: flex;
+    flex-direction: row; /* Ensure buttons are in a horizontal row */
+    justify-content: center; /* Center buttons horizontally */
+    align-items: center; /* Align items vertically */
+    position: fixed;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    gap: 20px; /* Adjust the gap value as needed */
+    padding: 10px; /* Add padding to prevent overlap */
+}
+
+.explore-button, .compare-button {
+    width: 150px;
+    padding: 15px 30px;
+    border: 2px solid #fff;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+    color: white;
+    font-size: 1.2em;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s ease-in-out;
+    margin: 5px; /* Slight margin for each button */
+}
+
+.explore-button:hover, .compare-button:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #000;
+    transform: scale(1.1);
+}
+
+
+
+/* Companies Section */
+.companies-section {
+    padding: 50px 0;
+    text-align: center;
+}
+
+.companies {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.company {
+    padding: 15px 30px;
+    border: 2px solid #fff;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+    color: white;
+    font-size: 1.2em;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s ease-in-out;
+    max-width: 200px;
+}
+
+.company:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #000;
+    transform: scale(1.1);
+}
+
+/* Description Text Styling */
+.description {
+    font-size: 1.2em;
+    font-weight: 300;
+    margin-top: 20px;
+    max-width: 600px;
+    line-height: 1.8;
+    opacity: 0; /* Hidden initially */
+    transform: translateY(50px); /* Move down initially */
+    transition: opacity 1s ease, transform 1s ease; /* Smooth transition */
+    padding-top: 20px;
+}
+
+.description.visible {
+    opacity: 1; /* Visible on scroll */
+    transform: translateY(0); /* Reset position */
+}
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    overflow: auto;
+    opacity: 0;
+    transition: opacity 0.3s ease; /* Smooth fade transition */
+}
+
+.modal.show {
+    display: block; /* Show the modal */
+    opacity: 1; /* Fade in */
+}
+
+
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    h1 {
+        font-size: 2.5em;
+    }
+
+    .explore-button {
+        padding: 10px 20px;
+        font-size: 1.2em;
+    }
+
+    .company {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+}
