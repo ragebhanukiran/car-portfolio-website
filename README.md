@@ -27,7 +27,7 @@ The **Car Portfolio Website** is a sleek platform inspired by *Asphalt 9*, showc
 
 ## 🚀 How to Run Locally  
 ```bash  
-git clone https://github.com/your-username/car-portfolio.git  
+https://github.com/ragebhanukiran/car-portfolio-website.git 
 cd car-portfolio  
 pip install -r requirements.txt  
 python app.py  
